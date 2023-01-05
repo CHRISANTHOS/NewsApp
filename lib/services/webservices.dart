@@ -14,6 +14,7 @@ class WebServices{
     if(response.statusCode == 200){
       final result = jsonDecode(response.body);
       Iterable list = result['articles'];
+      print('done');
       return list.map((article) => NewsArticle.fromJson(article)).toList();
     }else{
       throw Exception('Can\'t get news data');
