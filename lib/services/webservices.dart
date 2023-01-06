@@ -5,7 +5,7 @@ import 'package:newsapp/models/newsArticle.dart';
 
 class WebServices{
 
-  String url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=6a545aaa71104c9a951a46f4b068e41c';
+  String url = 'https://newsapi.org/v2/top-headlines?country=ng&apiKey=6a545aaa71104c9a951a46f4b068e41c';
 
   Future<List<NewsArticle>> fetchTopHeadlines()async{
 

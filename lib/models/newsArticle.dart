@@ -1,7 +1,7 @@
 class NewsArticle {
   final String title;
   final String description;
-  final String urlToImage;
+  dynamic urlToImage;
   final String url;
 
   NewsArticle(
@@ -10,12 +10,12 @@ class NewsArticle {
       required this.urlToImage,
       required this.url});
 
-  factory NewsArticle.fromJson(Map<String, dynamic> json) {
+  factory NewsArticle.fromJson(Map<dynamic, dynamic> json) {
 
     return NewsArticle(
         title:json["title"] ?? '',
         description:json["description"] ?? '',
-        urlToImage:json["urlToImage"] ?? '',
+        urlToImage:json["urlToImage"],
         url: json["url"] ?? '');
   }
 

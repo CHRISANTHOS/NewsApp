@@ -14,7 +14,7 @@ class NewsArticleViewModel{
   String get description{
     return _newsArticle.description;
   }
-  String get imageUrl{
+  dynamic get imageUrl{
     return _newsArticle.urlToImage;
   }
   String get url{
