@@ -16,4 +16,10 @@ class NewsArticleListViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
+  Future<void> populateSearchHeadlines(String search)async{
+    List<NewsArticle> newsArticle = await WebServices().searchHeadlines(search);
+    articles = newsArticle.map((article) => NewsArticleViewModel(article: article)).toList();
+    notifyListeners();
+  }
+
 }

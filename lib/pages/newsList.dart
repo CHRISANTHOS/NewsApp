@@ -1,32 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/viewmodels/newsArticleListViewModel.dart';
 import 'package:provider/provider.dart';
+import 'package:newsapp/viewmodels/newsArticleListViewModel.dart';
 
-class NewsList extends StatefulWidget {
-
-  @override
-  State<NewsList> createState() => _NewsListState();
-}
-
-class _NewsListState extends State<NewsList> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Provider.of<NewsArticleListViewModel>(context, listen: false).populateTopHeadlines();
-  }
+class NewsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final vm = Provider.of<NewsArticleListViewModel>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Latest News'),
-      ),
-      body: ListView.builder(
+    return ListView.builder(
         itemCount: vm.articles.length,
-          itemBuilder: (context, index){
+        itemBuilder: (context, index){
           return ListTile(
             leading: Container(
               width: 100,
@@ -35,8 +17,7 @@ class _NewsListState extends State<NewsList> {
             ),
             title: Text(vm.articles[index].title),
           );
-          }
-      ),
+        }
     );
   }
 }
