@@ -11,12 +11,25 @@ class NewsListPage extends StatefulWidget {
 }
 
 class _NewsListPageState extends State<NewsListPage> {
+
+  TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Provider.of<NewsArticleListViewModel>(context, listen: false)
         .populateTopHeadlines();
+  }
+
+  Widget _builder(NewsArticleListViewModel vm){
+    switch (vm.loadingStatus){
+      case LoadingStatus.searching:
+        return Align(child: CircularProgressIndicator());
+      case LoadingStatus.empty:
+        return Align(child: Text('No results found'));  
+      case LoadingStatus.completed:
+        return NewsList();
+    }
   }
 
   @override
@@ -26,49 +39,48 @@ class _NewsListPageState extends State<NewsListPage> {
         appBar: AppBar(
           title: const Text('Latest News'),
         ),
-        body: ProgressHUD(
-          child: Builder(builder: (context) {
-            return Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                            icon: Icon(Icons.search),
-                            hintText: 'Search',
-                            hintStyle: TextStyle(color: Colors.grey)),
-                        onChanged: (value) {
-                          search = value;
-                        },
-                      ),
+        body: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                          icon: Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Icon(Icons.search),
+                          ),
+                          hintText: 'Search',
+                          hintStyle: TextStyle(color: Colors.grey)),
+                      onChanged: (value) {
+                        search = value;
+                      },
                     ),
-                    Expanded(
-                      child: TextButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
-                        ),
-                        onPressed: (){
-                          final progress = ProgressHUD.of(context);
-                          progress?.show();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          currentFocus.unfocus();
-                          Provider.of<NewsArticleListViewModel>(context, listen: false)
-                              .populateSearchHeadlines(search!);
-                          progress?.dismiss();
-                        },
-                        child: Text('search', style: TextStyle(color: Colors.white),),
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
                       ),
-                    )
-                  ],
-                ),
-                Expanded(
-                    child: Container(
-                  child: NewsList(),
-                ))
-              ],
-            );
-          }),
-        ));
+                      onPressed: (){
+                        _controller.clear();
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+                        currentFocus.unfocus();
+                        Provider.of<NewsArticleListViewModel>(context, listen: false)
+                            .populateSearchHeadlines(search!);
+                      },
+                      child: Text('search', style: TextStyle(color: Colors.white),),
+                    ),
+                  )
+                ],
+              ),
+              Expanded(
+                  child: Container(
+                child: _builder(Provider.of<NewsArticleListViewModel>(context)),
+              ))
+            ],
+          )
+        );
   }
 }
