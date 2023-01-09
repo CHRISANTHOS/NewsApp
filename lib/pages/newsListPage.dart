@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:newsapp/viewmodels/newsArticleListViewModel.dart';
 import 'package:provider/provider.dart';
 import 'newsList.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 String? search;
 class NewsListPage extends StatefulWidget {
@@ -38,6 +37,12 @@ class _NewsListPageState extends State<NewsListPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Latest News'),
+          actions: [
+            IconButton(onPressed: (){
+              Provider.of<NewsArticleListViewModel>(context, listen: false).populateTopHeadlines();
+              // print('done');
+            }, icon: Icon(Icons.refresh))
+          ],
         ),
         body: Column(
             children: [
