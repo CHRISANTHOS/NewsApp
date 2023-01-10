@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:newsapp/viewmodels/newsArticleListViewModel.dart';
 import 'package:provider/provider.dart';
 import 'newsList.dart';
+import 'package:newsapp/viewmodels/newsArticleViewModel.dart';
+import 'newsArticleDetailsPage.dart';
 
 String? search;
 class NewsListPage extends StatefulWidget {
@@ -20,14 +22,20 @@ class _NewsListPageState extends State<NewsListPage> {
         .populateTopHeadlines();
   }
 
-  Widget _builder(NewsArticleListViewModel vm){
+  void _newsListDetails (BuildContext context, NewsArticleViewModel article){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> NewsArticleDetailsPage(article: article)));
+  }
+
+  Widget _builder(BuildContext context, NewsArticleListViewModel vm){
     switch (vm.loadingStatus){
       case LoadingStatus.searching:
         return Align(child: CircularProgressIndicator());
       case LoadingStatus.empty:
         return Align(child: Text('No results found'));  
       case LoadingStatus.completed:
-        return NewsList();
+        return NewsList(onSelected: (article){
+          _newsListDetails(context, article);
+        },);
     }
   }
 
@@ -82,7 +90,7 @@ class _NewsListPageState extends State<NewsListPage> {
               ),
               Expanded(
                   child: Container(
-                child: _builder(Provider.of<NewsArticleListViewModel>(context)),
+                child: _builder(context, Provider.of<NewsArticleListViewModel>(context)),
               ))
             ],
           )

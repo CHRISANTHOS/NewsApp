@@ -6,9 +6,9 @@ import 'newsArticleDetailsPage.dart';
 
 class NewsList extends StatelessWidget {
 
-   void _newsListDetails (BuildContext context, NewsArticleViewModel article){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> NewsArticleDetailsPage(article: article)));
-  }
+  final Function(NewsArticleViewModel article) onSelected;
+  NewsList({required this.onSelected});
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class NewsList extends StatelessWidget {
         itemBuilder: (context, index){
           return ListTile(
             onTap: (){
-              _newsListDetails(context, vm.articles[index]);
+              onSelected(vm.articles[index]);
             },
             leading: Container(
               width: 100,
